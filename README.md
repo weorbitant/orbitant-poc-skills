@@ -64,6 +64,36 @@ learned. All six share a simple markdown state store at `~/.claude/learning/`
 `/learn` to work through them → `/end-learn` to wrap up → `/learning-report`
 to reflect.
 
+### debrief
+
+A bottom-up friction-capture skill. Run at the end of a Claude Code session to
+turn the corrections you made and the project knowledge you had to volunteer
+into proposed `CLAUDE.md` edits — so the next session starts higher up the
+curve. Designed to be high-signal: returning *"session looks clean"* with no
+proposals is a first-class outcome, not a fallback.
+
+**Use when:**
+- "/debrief" / "/debrief the naming convention thing"
+- "wrap up this session" / "what did we learn this session"
+- "any rules to capture" / "should we update CLAUDE.md"
+
+**Commands:**
+
+| Command | Purpose |
+|---|---|
+| `/debrief` | Scan the full session for friction, propose `CLAUDE.md` edits. |
+| `/debrief <hint>` | Same, but focused on the area named (e.g., `/debrief the API naming convention thing`). |
+
+**Output:** Either one message listing N proposed edits with cited evidence per
+proposal — which the engineer approves all/some/with-edits/none of — **or** a
+celebratory *"session looks clean"* message if nothing meets the bar. Approved
+edits are appended to the project root `CLAUDE.md`. The engineer commits via
+their normal git flow.
+
+**v1 scope:** `CLAUDE.md` edits only. No skills, subagents, hooks, slash
+commands, or settings proposals. No subdirectory `CLAUDE.md` targeting. No
+SessionEnd hook reminder. Stateless across runs.
+
 <!-- Add new skills below as a new H3 section. Keep each one self-contained so
      it can be understood without reading the others. -->
 
