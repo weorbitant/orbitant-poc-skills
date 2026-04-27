@@ -131,4 +131,72 @@ This is the **default** outcome the skill is biased toward. Do not append "but h
 
 ### 9. Apply selected proposals
 
-(Application logic defined in next section.)
+Wait for the engineer's reply. Once they answer:
+
+#### "none" or no selection
+
+Reply: *"OK, nothing applied. CLAUDE.md unchanged."* and stop.
+
+#### "all", "1 and 3", or specific indices
+
+For each selected proposal, write it to **the project root `CLAUDE.md`**:
+
+1. **If `CLAUDE.md` does not exist:** Create it with a minimal scaffold:
+
+   ```markdown
+   # <repo-name>
+
+   ## <Section name from the proposal type>
+
+   - <proposal markdown>
+   ```
+
+   Use the repo directory name as the H1. Pick the section heading based on the proposal type — e.g. `## Conventions` for project rules, `## Project knowledge` for project knowledge.
+
+2. **If `CLAUDE.md` exists:**
+   - If the proposal clearly fits an existing section heading (e.g., a new convention rule fits an existing `## Conventions` section), append within that section.
+   - Otherwise, append a new section at the bottom of the file.
+   - **Never modify or delete existing content.** Append-only.
+
+3. **Do not target subdirectory `CLAUDE.md` files** (`api/CLAUDE.md`, etc.) — always edit project root in v1. The engineer can move content manually if needed.
+
+4. **Do not stage and do not commit.** After writing, report:
+
+   ```
+   Applied [list of proposal titles] to CLAUDE.md.
+   Review the diff and commit when ready.
+   ```
+
+#### "1 with edit: <change>"
+
+Apply the engineer's edit verbatim. Do not second-guess. If the requested change is genuinely unclear, ask **one** clarifying question, then apply.
+
+#### Engineer pushes back ("that's not actually a rule, I just changed my mind")
+
+Drop or revise the proposal based on the engineer's reasoning. **Do not defend the proposal.** The engineer is the source of truth.
+
+## Edge cases
+
+- **Hint matches nothing.** If `/debrief <hint>` was used but no friction matches the hint, reply:
+
+  > I scanned for "`<hint>`" but couldn't find friction matching it. Either the topic didn't surface in this session, or your existing CLAUDE.md already covers it.
+
+  **Do not** fabricate a match.
+
+- **Engineer rejects all proposals.** Reply *"OK, nothing applied. CLAUDE.md unchanged."* Do not re-pitch.
+
+- **Multiple `/debrief` calls in one session.** This skill is stateless. Re-running scans the session afresh. Already-applied items will not re-surface (caught by the dedupe pass against CLAUDE.md). Previously-rejected items *may* re-surface — that's correct: the engineer can change their mind.
+
+- **Brand-new fresh repo with no CLAUDE.md.** The application step handles this (creates the file with a minimal scaffold). No special detection logic needed.
+
+- **Very short session.** Run normally. If the bar isn't met, return the "session looks clean" message.
+
+- **Session crossed many topics.** Trust the bar to filter. The per-proposal evidence requirement keeps quality up regardless of session breadth. Do not summarize every topic — surface only what meets the bar.
+
+## Important
+
+- **Bias toward zero.** Your default outcome is "session looks clean". Finding something is the exception that needs justification, not the rule.
+- **Append-only.** Never modify or delete existing CLAUDE.md content.
+- **Engineer is source of truth.** If the engineer pushes back on a proposal, drop or revise — never defend.
+- **No staging, no commits.** The engineer owns the git flow.
+- **No proposals beyond CLAUDE.md edits.** This skill does not propose new skills, subagents, hooks, slash commands, or settings. If the engineer asks, point out that those are deliberate-design artifacts and out of scope for `/debrief`.
