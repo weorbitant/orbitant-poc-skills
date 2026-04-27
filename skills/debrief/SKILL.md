@@ -34,4 +34,64 @@ This skill is part of the future Orbitant `orbitant-engineering` plugin's bottom
 
 ## Process
 
-(Sections added in subsequent tasks: detection, output, application, edge cases.)
+### 1. Read the existing CLAUDE.md
+
+Before proposing anything, read the project's `CLAUDE.md` if it exists. Hold its contents in mind so you can dedupe — never propose something already covered.
+
+If the project has subdirectory `CLAUDE.md` files (e.g. `api/CLAUDE.md`, `mobile/CLAUDE.md`), read those too. They count for dedupe.
+
+If no `CLAUDE.md` exists at all, that's fine — proceed. The application step (later) will offer to create one.
+
+### 2. Scan the session for friction
+
+Look for two narrow categories. **Nothing else qualifies.**
+
+**Category A — Project rules.** Explicit corrections that signal a project-wide convention.
+
+Examples:
+- *"we don't use moment.js"*
+- *"snake_case for API fields, not camelCase"*
+- *"don't add try/catch around X"*
+- *"we always write tests in Vitest, not Jest"*
+
+**Category B — Project knowledge.** Facts about the codebase Claude lacked, that the engineer had to volunteer.
+
+Examples:
+- *"the API is at /api/v2/"*
+- *"auth tokens live in the `tokens` table"*
+- *"run `npm run gen` after editing schemas"*
+- *"the dev server requires DATABASE_URL in .env.local"*
+
+### 3. Apply the bar
+
+For each candidate, ask: **Would adding this to CLAUDE.md have changed Claude's behavior in this session?** If no, drop it. The bar is single, mechanical, evidence-driven. There is no "must see N times" threshold — the principle handles it.
+
+### 4. Apply the exclusions
+
+Drop any candidate that fits any of these:
+
+- **Engineer changed their mind mid-session.** *("Actually, let's not do X."* — that's a reversal, not a rule.)
+- **One-off bugs Claude fixed after one prompt.** (Wouldn't have been prevented by CLAUDE.md.)
+- **Style nudges Claude got right after one correction.** (Already responsive — no future risk.)
+- **General coding wisdom.** (*"Don't use `var`"* is true everywhere; CLAUDE.md is for project-specifics.)
+- **Anything already covered in existing CLAUDE.md** (deduped in Step 1).
+
+### 5. Skill-execution friction counts the same
+
+If a correction surfaced *during* a skill invocation (e.g., the engineer corrected you while running `/twd` or another skill), it counts the same as any other correction. **Do not** discount it as "just clarifying the skill's instructions". The bar is still: would it have changed your behavior if it had been in CLAUDE.md? If yes, it qualifies.
+
+### 6. Require evidence per surviving candidate
+
+Every surviving candidate must have at least one quoted user message or a concrete missing-knowledge moment from the session. **No evidence → no proposal.** This makes the empty-result outcome mechanical, not a judgment call.
+
+### 7. Bias toward zero
+
+If you find nothing that meets the bar, **that is the correct outcome**. Do not invent proposals to feel productive. A clean session is a successful one. Returning zero proposals is celebrated, not apologized for.
+
+### 8. Output the result
+
+(Format defined in next section.)
+
+### 9. Apply selected proposals
+
+(Application logic defined in next section.)
