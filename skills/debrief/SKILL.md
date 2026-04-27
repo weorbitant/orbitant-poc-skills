@@ -90,7 +90,44 @@ If you find nothing that meets the bar, **that is the correct outcome**. Do not 
 
 ### 8. Output the result
 
-(Format defined in next section.)
+#### When proposals exist
+
+Return ONE message in this exact shape — and nothing else:
+
+```
+Found N moments worth capturing.
+
+## 1. <short title>
+**Type:** project rule | project knowledge
+**Evidence:** "<quoted user message or specific session moment>"
+**Proposed CLAUDE.md addition:**
+
+> <exact markdown that would land in CLAUDE.md>
+
+## 2. ...
+
+---
+Tell me which to apply: "all", "1 and 3", "1 with edit: <change>", or "none".
+```
+
+Each proposal **must** include the four labelled fields:
+
+- `**Type:**` — exactly `project rule` or `project knowledge`.
+- `**Evidence:**` — at least one quoted user message OR a concrete description of the missing-knowledge moment. The engineer must be able to recognize the moment without scrolling.
+- `**Proposed CLAUDE.md addition:**` followed by a blockquoted markdown block — the **literal text** that would land in CLAUDE.md, not a description of it. The engineer reads this verbatim, so it must be ready-to-paste.
+- The `---` separator and the `Tell me which to apply:` line at the very end.
+
+#### When nothing surfaces (the celebrated path)
+
+Return this message — exactly this, no embellishment, no additional commentary:
+
+```
+Session looks clean. No project rules or knowledge gaps surfaced — your CLAUDE.md held up.
+
+If something nagged you that I missed, run `/debrief <hint>` (e.g. `/debrief the import ordering thing`) and I'll focus there.
+```
+
+This is the **default** outcome the skill is biased toward. Do not append "but here's something just in case…" or hedge — a clean session is the good outcome.
 
 ### 9. Apply selected proposals
 
