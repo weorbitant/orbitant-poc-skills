@@ -2,9 +2,10 @@
 name: new-learning
 description: |
   Use when the user wants to find what to learn next, explore learning topics, get
-  project ideas for a skill gap, or add a learning idea to their backlog. Triggers on:
-  "what should I learn", "suggest learning projects", "I want to learn X", "add to my
-  learning backlog", or "find me resources on X".
+  project ideas for a skill gap, or add a learning idea to their backlog. Supports
+  repo-based ideas with --repo flag to generate milestones based on an existing project.
+  Triggers on: "what should I learn", "suggest learning projects", "I want to learn X",
+  "add to my learning backlog", "find me resources on X", or "I want to learn X in this repo".
 license: MIT
 version: "0.1.0"
 metadata:
@@ -38,8 +39,20 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
    - `~/.claude/learning/backlog.md` — avoid duplicating existing items
 
 2. **Determine source of ideas:**
-   - If the user passed an argument (e.g., `/new-learning "WebSockets"`): focus on that topic
+   - If the user passed a topic and `--repo` flag (e.g., `/new-learning "LangGraph" --repo ./my-project`):
+     focus on that topic AND analyze the repo
+   - If the user passed a topic only (e.g., `/new-learning "WebSockets"`): focus on that topic
    - If no argument: use gaps from profile + "still fuzzy" themes from archives
+
+   **When a `--repo` flag is provided:**
+   1. Analyze the repo at the given path — dependencies, file structure, key source files
+   2. Cross-reference with the requested topic — identify what's already implemented,
+      what's partially done, and what's missing
+   3. Generate milestones that build on top of existing code rather than starting from scratch
+
+   Example: `/new-learning "LangGraph" --repo ./my-agent`
+   Analysis: "LangGraph is installed, `src/agent.py` has a linear StateGraph with 2 nodes.
+   No conditional edges, no subgraphs, no persistence layer."
 
 3. **Search for current resources:**
    - Use web search to find up-to-date articles, tutorials, docs, and project ideas
@@ -72,12 +85,30 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
    3. Add input validation, error handling, and integration tests
    ```
 
+   **Repo-based proposal format** (when `--repo` was provided):
+
+   Add a `Repo context` line showing what the repo currently has:
+
+   ```
+   ### 1. Add conditional routing to your LangGraph agent
+   **Gap:** AI/orchestration  |  **Effort:** 2 sessions  |  **Style:** hands-on
+   **Repo context:** `src/agent.py` has a linear StateGraph — no branching yet
+
+   Build conditional edges that route to different tools based on LLM output.
+
+   **Milestones:**
+   1. Add a router node that classifies intent and branches
+   2. Implement tool-specific subgraphs for each branch
+   3. Add fallback handling and LangFuse tracing for the routing decisions
+   ```
+
 5. **User picks** — present as a numbered list. Ask: "Which ones should I add to your backlog? (e.g., 1, 3)"
 
 6. **Write to backlog.md:**
    - Create the file if it doesn't exist (with `## Backlog` header)
    - Append selected items as checkbox lines
-   - Format: `- [ ] <title> — **gap:** <gap> — **effort:** <N sessions> — **style:** <hands-on | reading>`
+   - Format: `- [ ] <title> — **gap:** <gap> — **effort:** <N sessions> — **style:** <hands-on | reading> — **repo:** <path>`
+   - The `— **repo:** <path>` segment is only included for repo-based items
 
 ## Important
 

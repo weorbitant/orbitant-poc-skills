@@ -37,7 +37,8 @@ Each section contains a bullet list.
 
 Body section: ## Backlog
 Each item is a checkbox line:
-- [ ] <title> — **gap:** <gap> — **effort:** <N sessions> — **style:** <hands-on | reading>
+- [ ] <title> — **gap:** <gap> — **effort:** <N sessions> — **style:** <hands-on | reading> — **repo:** <path> (optional)
+The `— **repo:** <path>` segment is only present for repo-based items.
 Completed items: - [x] ~~<title>~~ — completed YYYY-MM-DD
 
 ### current.md (active lesson)
