@@ -8,6 +8,7 @@ from `~/.claude/learning/` using these formats.
 ~/.claude/learning/
   profile.md              # Learner profile (init-learning)
   backlog.md              # Learning ideas queue (new-learning)
+  insights.md             # Learning intelligence summary (learning-insights)
   lessons/
     current.md            # Active lesson, one at a time (learn)
     archive/
@@ -88,6 +89,20 @@ Body sections:
 - ## Still Fuzzy On
 - ## Next Steps
 
+### insights.md
+
+Managed by the `learning-insights` skill. Created automatically on the first
+`/end-learn` after the enhancement — no manual setup needed.
+
+Frontmatter:
+- last_updated: YYYY-MM-DD
+
+Body sections:
+- ## Recurring Struggles — bullet list: `<theme> (N sessions, N topics) — last seen YYYY-MM-DD`
+- ## Confirmed Strengths — bullet list: `<theme> — confirmed across N sessions`
+- ## Difficulty Trend — bullet list: `<gap>: beginner | intermediate | advanced`
+- ## Incidental Notes — bullet list: `<brief observation> — source: <lesson topic> YYYY-MM-DD`
+
 ## Conventions
 
 - All dates use ISO format: YYYY-MM-DD
@@ -95,3 +110,5 @@ Body sections:
 - Skills create missing directories on first write
 - Skills preserve existing content when updating (append to backlog, update frontmatter)
 - Same-day log collision: check if YYYY-MM-DD.md exists, append -2, -3, etc.
+- Skills that read insights.md MUST handle the case where it doesn't exist — skip intelligence features silently, no errors, no "run X first" messages
+- insights.md is created automatically on the first /end-learn — no migration or manual setup needed

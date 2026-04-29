@@ -52,6 +52,31 @@ Read these files:
 - If postponed lesson picked: move it from `archive/` back to `lessons/current.md`, resume from last milestone
 - If backlog item picked: expand into a full lesson — generate milestones fitted to session_length, create `lessons/current.md`
 
+### 2.5. Build Learner Context
+
+Invoke the `learning-insights` skill in "build context" mode. It reads archived lessons,
+session logs, and `insights.md` to produce a learner context.
+
+**If fuzzy_topics found**, flag them to the user:
+"Before we start — these came up as fuzzy in past sessions:
+ - [topic] (from [lesson], [timeframe ago])
+ - [topic] (from [lesson], [timeframe ago])
+ Want to spend a few minutes on any of these, or dive in?"
+
+Wait for the user's choice. If they want to review, spend a few minutes on the topic
+(a quick question or explanation), then proceed to the lesson. If they want to dive in, proceed.
+
+**If cross_topic_patterns found**, mention briefly:
+"Heads up: I've noticed [theme] keeps coming up across different topics. I'll keep
+an eye on that today."
+
+This is informational only — do not wait for a response, proceed to Session Start.
+
+**Difficulty adjustment** feeds into milestone generation in step 4:
+- If the trend says "advanced" for this gap: skip beginner scaffolding, present harder challenges
+- If "beginner": provide more guidance, smaller steps
+- If no data yet: use default difficulty (intermediate)
+
 ### 3. Session Start
 
 Ask: "**Hands-on or reading today?**" (show the default from profile, user can override)

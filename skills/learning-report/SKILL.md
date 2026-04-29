@@ -49,6 +49,7 @@ Calculate the start date from today minus the timeframe.
 - `~/.claude/learning/logs/` — all session logs within the timeframe
 - `~/.claude/learning/lessons/archive/` — lessons closed within the timeframe
 - `~/.claude/learning/lessons/current.md` — active lesson (if any)
+- `~/.claude/learning/insights.md` — learning intelligence data (may not exist)
 
 ### 3. Generate Report
 
@@ -78,6 +79,12 @@ Structure the report with these sections:
 - Abandoned/postponed patterns (if any): "You postponed 2 frontend lessons — is frontend still a priority?"
 - Session frequency: "You averaged 3 sessions/week"
 - Style preferences observed
+
+**Learning Intelligence** (only if insights.md exists)
+- Strengths confirmed during this period
+- Recurring struggles with session counts
+- Difficulty progression for each gap (beginner → intermediate → advanced)
+- Any incidental notes logged during the period
 
 **Suggested Next Steps**
 - Recommend topics to revisit based on "still fuzzy" themes
@@ -113,6 +120,11 @@ Example output:
 - Frontend: addressed (React dashboard completed)
 - Backend APIs: in progress (GraphQL)
 - Infrastructure: untouched
+
+## Learning Intelligence
+- **Confirmed strengths:** LCEL chain composition, prompt templating
+- **Recurring struggles:** async error handling (4 sessions), state management (3 sessions)
+- **Difficulty progression:** backend APIs: intermediate → advanced, AI/orchestration: beginner → intermediate
 
 ## Suggested Next Steps
 - Revisit state management — still fuzzy after multiple sessions
