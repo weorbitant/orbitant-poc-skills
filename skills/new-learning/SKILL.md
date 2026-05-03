@@ -36,10 +36,11 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
    - `~/.claude/learning/profile.md` — gaps, goals, session_length
    - `~/.claude/learning/lessons/archive/` — scan "Still Fuzzy On" sections and abandoned lesson topics
    - `~/.claude/learning/backlog.md` — avoid duplicating existing items
+   - `~/.claude/learning/insights.md` — if it exists, read recurring struggles and confirmed strengths to inform suggestions
 
 2. **Determine source of ideas:**
    - If the user passed an argument (e.g., `/new-learning "WebSockets"`): focus on that topic
-   - If no argument: use gaps from profile + "still fuzzy" themes from archives
+   - If no argument: use gaps from profile + "still fuzzy" themes from archives + recurring struggles from insights
 
 3. **Search for current resources:**
    - Use web search to find up-to-date articles, tutorials, docs, and project ideas
@@ -86,3 +87,5 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
 - Mix hands-on and reading suggestions — don't propose only one type
 - If the user provides a specific topic, still search the web for the best current resources
 - Postponed lessons are NOT re-suggested here — they show up in `/learn` as resumable
+- If insights.md exists, use it to inform suggestions: prioritize topics related to recurring struggles, avoid suggesting basics on confirmed-strength topics
+- If insights.md does not exist, skip it silently — do not error or prompt the user

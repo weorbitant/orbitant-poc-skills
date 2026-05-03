@@ -36,6 +36,7 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
 - `~/.claude/learning/backlog.md` — count pending items
 - `~/.claude/learning/logs/` — recent logs for streak calculation
 - `~/.claude/learning/lessons/archive/` — count completed lessons, scan gap_addressed fields
+- `~/.claude/learning/insights.md` — count recurring struggles and confirmed strengths (may not exist)
 
 ### 2. Display
 
@@ -56,7 +57,10 @@ Streak: [N] sessions this week
 
 Lessons completed: [N] total
 Gaps addressed: [N] / [M] from profile
+Insights: [N] recurring struggles, [M] confirmed strengths
 ```
+
+If `insights.md` doesn't exist, show: `Insights: No data yet`
 
 If there are postponed lessons, add:
 ```

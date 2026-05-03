@@ -2,9 +2,9 @@
 name: end-learn
 description: |
   Use when the user is done learning for the day, wants to save progress, or wants to
-  wrap up a lesson. Also triggered by /learn when postponing or abandoning. Triggers on:
-  "end session", "done learning", "save progress", "wrap up", "end-learn", "I'm done
-  for today".
+  wrap up a lesson. Also triggered by /learn when postponing or abandoning. Updates the
+  learning intelligence layer (insights.md) after each session. Triggers on: "end session",
+  "done learning", "save progress", "wrap up", "end-learn", "I'm done for today".
 license: MIT
 version: "0.1.0"
 metadata:
@@ -115,6 +115,28 @@ Write to `~/.claude/learning/logs/YYYY-MM-DD.md`:
 - Set frontmatter: `status: abandoned`, `closed: YYYY-MM-DD`, `abandoned_reason: <reason>`
 - Preserve all milestone progress and session logs
 - Delete `current.md`
+
+### 5.5. Update Insights
+
+Invoke the `learning-insights` skill in "update insights" mode.
+
+Pass the session's observations from the confirmed debrief:
+- Struggles (from "Struggled with" section)
+- Key learnings (from "Key learnings" section)
+- Still fuzzy topics (from "Still fuzzy on" section)
+- Hints given during the session (from silent observation tracking)
+- Any incidental code observations noted during the session
+
+The `learning-insights` skill will:
+1. Update `~/.claude/learning/insights.md` (create it if first time)
+2. Return a one-liner if something meaningful changed
+
+If a one-liner is returned, show it to the user before the confirmation message in step 6.
+Examples:
+- "Insight updated: LCEL chain composition moved to confirmed strength"
+- "Pattern detected: state management has come up in 3 sessions now"
+
+If nothing meaningful changed, say nothing — proceed to step 6 silently.
 
 ### 6. Confirm
 
