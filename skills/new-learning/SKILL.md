@@ -72,35 +72,12 @@ Profile must exist at `~/.claude/learning/profile.md`. If not, tell the user:
    3. [Polish or advanced feature]
    ```
 
-   Example:
-   ```
-   ### 1. Build a REST API with Express + PostgreSQL
-   **Gap:** backend  |  **Effort:** 3 sessions  |  **Style:** hands-on
+   When `--repo` was provided, add a `**Repo context:**` line under the metadata
+   showing what the repo currently has, and tailor the milestones so they extend
+   the existing code rather than starting from scratch.
 
-   Build a task management API from scratch — routes, validation, database, and tests.
-
-   **Milestones:**
-   1. Scaffold Express app, define routes, return mock data
-   2. Connect PostgreSQL, implement CRUD operations
-   3. Add input validation, error handling, and integration tests
-   ```
-
-   **Repo-based proposal format** (when `--repo` was provided):
-
-   Add a `Repo context` line showing what the repo currently has:
-
-   ```
-   ### 1. Add conditional routing to your LangGraph agent
-   **Gap:** AI/orchestration  |  **Effort:** 2 sessions  |  **Style:** hands-on
-   **Repo context:** `src/agent.py` has a linear StateGraph — no branching yet
-
-   Build conditional edges that route to different tools based on LLM output.
-
-   **Milestones:**
-   1. Add a router node that classifies intent and branches
-   2. Implement tool-specific subgraphs for each branch
-   3. Add fallback handling and LangFuse tracing for the routing decisions
-   ```
+   See `@references/proposal-formats.md` for worked examples of both standard and
+   repo-based proposals.
 
 5. **User picks** — present as a numbered list. Ask: "Which ones should I add to your backlog? (e.g., 1, 3)"
 
