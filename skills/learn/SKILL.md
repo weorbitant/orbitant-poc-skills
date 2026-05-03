@@ -2,7 +2,8 @@
 name: learn
 description: |
   Use when the user wants to sit down and learn, continue a lesson, practice a skill,
-  or work through a learning project. Triggers on: "let's learn", "continue my lesson",
+  or work through a learning project. Supports repo-based learning where the user builds
+  a real project in an existing repo. Triggers on: "let's learn", "continue my lesson",
   "start learning", "practice", "I have time to learn", or "pick up where I left off".
 license: MIT
 version: "0.1.0"
@@ -56,8 +57,35 @@ Read these files:
 
 Ask: "**Hands-on or reading today?**" (show the default from profile, user can override)
 
-If hands-on, also ask: "**Where should we create the project?**" (suggest a path, user confirms)
-- Record `project_path` in `current.md`
+If hands-on:
+- **If the backlog item has a `repo` field**: automatically use that path as `project_path`.
+  Tell the user: "Working in repo at `[path]`."
+- **If no repo field**: ask: "**Are you working in an existing repo or starting fresh?**"
+  - Existing repo → "What's the path?" → record `project_path` in `current.md`
+  - Fresh → "Where should we create the project?" → suggest a path, user confirms, record `project_path`
+
+### 3.5. Repo Analysis (repo-based lessons only)
+
+Skip this step if the lesson is fresh (no existing repo) or reading mode.
+
+Before delivering content, analyze the repo at `project_path`:
+
+1. **Structure**: Read the file tree, identify the project layout and key directories
+2. **Dependencies**: Read `package.json`, `pyproject.toml`, `requirements.txt`, `go.mod`,
+   or equivalent — understand what's installed
+3. **Implementation**: Read key source files to understand patterns in use. Focus on files
+   related to the lesson topic. Example: for a LangGraph lesson, read files that import
+   `langgraph`, `langchain`, or related packages.
+
+Produce a repo summary kept in conversation context:
+- What exists: "FastAPI server at `src/main.py`, LangChain agent at `src/agent.py`, no tests yet"
+- What's relevant to the lesson topic: "LangGraph StateGraph defined in `src/agent.py` with 2 nodes, linear flow, no conditional edges"
+- What's missing or could be improved: "No error handling on API routes, LangFuse imported but not instrumented"
+
+This summary feeds milestone generation:
+- If expanding a backlog item into milestones, tailor them to the repo state
+  (e.g., "add conditional edges to your existing graph" not "create a new graph from scratch")
+- If resuming, re-analyze to catch changes made outside of learning sessions
 
 ### 4. Deliver Content
 
@@ -98,6 +126,37 @@ Your task: Replace the mock data with real API calls.
 - After each concept block, ask a comprehension question to test understanding
 - Propose thought exercises (no coding required)
 - This mode works on mobile — keep responses readable, use short paragraphs, avoid code blocks when possible
+
+### Repo-Aware Delivery (applies to hands-on sessions with an existing repo)
+
+During repo-based sessions, the system has **read-write access** to the repo:
+
+**Guided mode with repo:**
+- Write code directly in the repo — create files, modify existing ones, install dependencies
+- Explain each change as you make it — WHY this pattern, not just how
+- After writing a piece, ask the user to write the next piece in the repo
+- Reference real file paths and function names from the repo analysis
+
+**Challenge mode with repo:**
+- Challenge prompts reference real files and real code:
+  "Your `build_graph()` function in `src/agent.py` has no conditional edges.
+  Add branching based on the tool call result."
+- Success criteria reference real, observable outcomes:
+  "The `/chat` endpoint should now route math questions to the calculator tool"
+- When reviewing user's work, read the actual changes in the repo, not just check a box
+- Can fix or refactor code when the user asks, or during milestone completion review
+
+**Both modes:**
+- The system creates files, installs dependencies, modifies existing code — whatever the milestone requires
+- Learning metadata (logs, insights, progress) stays in `~/.claude/learning/`, NOT in the repo
+
+**Incidental observations:**
+When reading code during the session, if something unrelated to the current milestone is
+worth noting, mention it briefly as a one-liner without derailing the session:
+"btw, I noticed your `StateGraph` doesn't have a `retry_policy` — worth adding later for resilience"
+
+Do NOT stop the session to fix unrelated issues. Note them mentally for the `/end-learn`
+debrief.
 
 ### 5. Silent Observation Tracking
 
